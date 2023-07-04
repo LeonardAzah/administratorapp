@@ -4,6 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Buttons from "./Buttons";
+import { useParams } from "react-router-dom";
 
 const buttonStyle = {
   borderRadius: 25,

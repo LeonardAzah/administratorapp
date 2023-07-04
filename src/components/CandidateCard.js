@@ -15,6 +15,7 @@ import styled from "@emotion/styled";
 import Fab from "@mui/material/Fab";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Link } from "react-router-dom";
 
 const StyledCard = styled((props) => <Card {...props} />)(({ theme }) => ({
   padding: "0.5rem",
@@ -63,6 +64,7 @@ const CandidateCard = ({ name, bio, handleDeletClick, handleEditCLick }) => {
             size="small"
             color="info"
             aria-label="add"
+            component={Button}
             onClick={handleEditCLick}
           >
             <EditIcon />{" "}

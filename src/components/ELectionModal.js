@@ -51,14 +51,10 @@ function ElectionModal(props) {
       },
     });
     if (success) {
-      navigate(`/home/poll/candidates/${Id}`);
+      handleClose();
       props.resetForm();
     }
   };
-
-  useEffect(() => {
-    onSubmit();
-  }, []);
 
   return (
     <Dialog

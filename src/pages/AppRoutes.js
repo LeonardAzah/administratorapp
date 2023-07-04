@@ -37,6 +37,7 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       />
+
       <Route
         path="/home/results"
         element={

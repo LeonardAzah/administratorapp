@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import dayjs from "dayjs";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
@@ -30,6 +30,7 @@ const validationSchema = yup.object().shape({
 
 function CandidateModal(props) {
   const { id } = useParams();
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const { open, handleClose } = props;
@@ -47,15 +48,21 @@ function CandidateModal(props) {
       },
     });
     if (success) {
-      navigate(`/home/poll/candidates/${id}`);
+      handleClose();
       props.resetForm();
+    } else {
+      setShowErrorAlert(true);
+      handleClose();
     }
     return axiosFetch;
   };
 
-  useEffect(() => {
-    onSubmit();
-  }, []);
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowErrorAlert(false);
+  };
 
   return (
     <Dialog
@@ -76,6 +83,15 @@ function CandidateModal(props) {
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: "block", justifyContent: "space-between" }}>
+        <Snackbar
+          open={showErrorAlert}
+          autoHideDuration={3000}
+          onClose={handleAlertClose}
+        >
+          <Alert severity="error" variant="filled" onClose={handleAlertClose}>
+            Student not found
+          </Alert>
+        </Snackbar>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
