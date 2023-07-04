@@ -10,7 +10,7 @@ import {
   Box,
   CardActions,
 } from "@mui/material";
-import Buttons from "./Button";
+import Buttons from "./Buttons";
 import me from "../assets/me.jpg";
 import styled from "@emotion/styled";
 

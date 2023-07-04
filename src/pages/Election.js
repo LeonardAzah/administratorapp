@@ -44,6 +44,7 @@ const Election = () => {
   const handleModalClose = () => {
     setOpenModal(false);
     setOpenModalDept(false);
+    getData();
   };
 
   const getData = async () => {
@@ -129,7 +130,14 @@ const Election = () => {
           {loading && <Spinner text="Fetching elections..." />}
 
           {elections && elections.length > 0 ? (
-            <Box sx={{ display: "flex", gap: 2.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "space-evenly",
+              }}
+            >
               {elections.map((election) => (
                 <BasicCard
                   key={election.id}
@@ -168,7 +176,14 @@ const Election = () => {
           {loading && <Spinner text="Fetching elections..." />}
 
           {elections && elections.length > 0 ? (
-            <Box sx={{ display: "flex", gap: 2.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "space-evenly",
+              }}
+            >
               {departmentalElections.map((election) => (
                 <BasicCard
                   key={election.id}

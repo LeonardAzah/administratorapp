@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Typography } from "@mui/material";
-import DateInput from "./DateInput";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import DateTimeInput from "./DateTimeInput";
 import { Formik, Form, Field } from "formik";
@@ -28,9 +27,9 @@ const initialValues = {
 };
 
 const validationSchema = yup.object().shape({
-  titles: yup.string().required(),
-  startDate: yup.date().required(),
-  endDate: yup.date().required(),
+  titles: yup.string(),
+  startDate: yup.date(),
+  endDate: yup.date(),
 });
 
 function ElectionModal(props) {
@@ -41,8 +40,8 @@ function ElectionModal(props) {
   const navigate = useNavigate();
 
   const CREATE_ELECTION_URL = `/poll/${Id}`;
-
   const onSubmit = async (values, props) => {
+    console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
       method: "post",
@@ -52,9 +51,14 @@ function ElectionModal(props) {
       },
     });
     if (success) {
-      navigate("/home/poll");
+      navigate(`/home/poll/candidates/${Id}`);
+      props.resetForm();
     }
   };
+
+  useEffect(() => {
+    onSubmit();
+  }, []);
 
   return (
     <Dialog
@@ -86,31 +90,33 @@ function ElectionModal(props) {
                 as={InputText}
                 label="Title"
                 name="title"
-                onChange={props.handleChange}
-                value={props.values.title}
                 type="string"
                 fullWidth
                 required
+                onChange={props.handleChange}
+                value={props.values.title}
               />
               <Field
                 as={DateTimeInput}
-                label="Strat Date"
-                type="date"
+                label="Start Date"
+                name="startDate"
                 defaultValue={today}
                 disablePast
                 views={["year", "month", "day", "hours", "minutes"]}
-                onChange={props.handleChange}
                 value={props.values.startDate}
+                onChange={(value) => props.setFieldValue("startDate", value)}
+                fullWidth
               />
               <Field
                 as={DateTimeInput}
                 label="End Date"
-                type="date"
+                name="endDate"
                 defaultValue={tomorrow}
                 disablePast
                 views={["year", "month", "day", "hours", "minutes"]}
-                onChange={props.handleChange}
                 value={props.values.endDate}
+                onChange={(value) => props.setFieldValue("endDate", value)}
+                fullWidth
               />
 
               <Field

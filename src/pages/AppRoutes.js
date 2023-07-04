@@ -6,6 +6,7 @@ import RequireAuth from "../hooks/RequireAuth";
 import Election from "./Election";
 import Result from "./Result";
 import Poll from "./Poll";
+import AddCandidate from "./AddCandidate";
 
 const AppRoutes = () => {
   return (
@@ -28,14 +29,14 @@ const AppRoutes = () => {
           </RequireAuth>
         }
       />
-      {/* <Route
+      <Route
         path="/home/poll/candidates/:id"
         element={
           <RequireAuth>
-            <Votepage />
+            <AddCandidate />
           </RequireAuth>
         }
-      /> */}
+      />
       <Route
         path="/home/results"
         element={
