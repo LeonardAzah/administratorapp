@@ -21,7 +21,7 @@ const StyledCard = styled((props) => <Card {...props} />)(({ theme }) => ({
   backgroundColor: "#fafafa",
   boxShadow: 5,
   width: "333px",
-  height: "220px",
+  height: "228px",
 }));
 
 const styledAvatar = {

@@ -1,16 +1,5 @@
 import React from "react";
-import {
-  Card,
-  Typography,
-  CardMedia,
-  Avatar,
-  CardHeader,
-  CardContent,
-  Button,
-  Box,
-  CardActions,
-} from "@mui/material";
-import Buttons from "./Buttons";
+import { Card, Typography, Avatar, Box } from "@mui/material";
 import me from "../assets/me.jpg";
 import styled from "@emotion/styled";
 

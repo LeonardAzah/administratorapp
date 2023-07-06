@@ -78,12 +78,15 @@ const Signin = () => {
           {(props) => (
             <Form>
               <Typography
-                className={errorMessage ? "errorMessage" : "offscreen"}
+                className={
+                  errorMessage && errorMessage ? "errorMessage" : "offscreen"
+                }
                 aria-live="assertive"
                 sx={{
-                  fontWeight: 900,
-                  fontSize: "1rem",
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
                   marginBottom: "1rem",
+                  color: "#ba000d",
                 }}
               >
                 {errorMessage}

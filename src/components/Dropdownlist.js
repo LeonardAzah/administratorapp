@@ -41,7 +41,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect({ value, onChange }) {
+export default function Dropdownlist({ value, onChange }) {
   const theme = useTheme();
 
   //   const [personName, setPersonName] = React.useState([]);

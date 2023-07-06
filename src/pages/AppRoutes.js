@@ -4,9 +4,10 @@ import Dashboard from "./Dashboard";
 import { Routes, Route } from "react-router-dom";
 import RequireAuth from "../hooks/RequireAuth";
 import Election from "./Election";
+import AddCandidate from "./AddCandidate";
 import Result from "./Result";
 import Poll from "./Poll";
-import AddCandidate from "./AddCandidate";
+import Signup from "./Signup";
 
 const AppRoutes = () => {
   return (
@@ -42,7 +43,7 @@ const AppRoutes = () => {
         path="/home/results"
         element={
           <RequireAuth>
-            <Result />
+            <Poll />
           </RequireAuth>
         }
       />
@@ -50,7 +51,15 @@ const AppRoutes = () => {
         path="/home/results/votes/:id"
         element={
           <RequireAuth>
-            <Poll />
+            <Result />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/home/register"
+        element={
+          <RequireAuth>
+            <Signup />
           </RequireAuth>
         }
       />

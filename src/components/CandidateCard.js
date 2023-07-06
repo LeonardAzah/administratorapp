@@ -32,7 +32,7 @@ const styledAvatar = {
   width: "8rem",
 };
 
-const CandidateCard = ({ name, bio, handleDeletClick, handleEditCLick }) => {
+const CandidateCard = ({ name, bio, handleDeletClick, handleEditClick }) => {
   return (
     <StyledCard elevation={1}>
       <Box sx={{ display: "block" }}>
@@ -65,7 +65,7 @@ const CandidateCard = ({ name, bio, handleDeletClick, handleEditCLick }) => {
             color="info"
             aria-label="add"
             component={Button}
-            onClick={handleEditCLick}
+            onClick={handleEditClick}
           >
             <EditIcon />{" "}
           </Fab>

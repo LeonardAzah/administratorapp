@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
 
 import { Typography, Box } from "@mui/material";
 
-import Appbar from "../components/Appbar";
-import ResultCard from "../components/ResultCard";
-import Spinner from "../components/Spinner";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
-// import { ca } from "date-fns/locale";
+import Spinner from "../components/Spinner";
+import Appbar from "../components/Appbar";
+import NotPresent from "../components/NotPresent";
+import BasicCard from "../components/BasicCard";
+
+const userInfo = window.localStorage.getItem("user");
+const user = JSON.parse(userInfo);
+const facultyId = user.faculty;
+const departmentId = user.department;
+const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
 
 const Poll = () => {
-  const { id } = useParams();
-
   const [response, errorMessage, loading, axiosFetch] = useAxios();
-  const RESULT_URL = `/poll/votes/${id}`;
 
   const getData = async () => {
     await axiosFetch({
       axiosInstance: axiosInstance,
       method: "get",
-      url: RESULT_URL,
+      url: ELECTION_URL,
     });
 
     return axiosFetch;
@@ -30,8 +32,8 @@ const Poll = () => {
     getData();
   }, []);
 
-  const candidates = response;
-  console.log(candidates);
+  const elections = response.polls;
+  const departmentalElections = response.departmentpolls;
 
   return (
     <Box>
@@ -39,44 +41,94 @@ const Poll = () => {
         <Appbar />
       </Box>
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "1rem",
+        <div
+          style={{
+            borderRadius: "25px",
+            background: "rgba(5, 0, 255, 0.2)",
+            padding: "0.5rem",
           }}
         >
           <Typography
-            variant="h4"
             sx={{
-              color: "#01579B",
-              fontWeight: "700",
+              color: " #0500FF",
               textAlign: "center",
+              fontWeight: "400",
+              fontSize: "18px",
             }}
           >
-            Election Results
+            Faculty Elections
           </Typography>
+        </div>
+        <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+          {loading && <Spinner text="Fetching elections..." />}
+
+          {elections && elections.length > 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              {elections.map((election) => (
+                <BasicCard
+                  key={election.id}
+                  id={election.id}
+                  title={election.title}
+                  link={`/home/results/votes/${election.id}`}
+                />
+              ))}
+            </Box>
+          ) : (
+            <NotPresent text="No Available Elections" />
+          )}
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
-            {loading && loading ? (
-              <Spinner text="Fetching elections..." />
-            ) : (
-              candidates.map((candidate) => (
-                <>
-                  <ResultCard
-                    key={candidate.id}
-                    name={
-                      candidate.departmentalCandidate
-                        ? candidate.departmentalCandidate.name
-                        : candidate.facultyCandidate.name
-                    }
-                    voteCount={candidate.voteCount}
-                  />
-                </>
-              ))
-            )}
-          </Box>
+      </Box>
+
+      <Box>
+        <div
+          style={{
+            borderRadius: "25px",
+            background: "rgba(5, 0, 255, 0.2)",
+            padding: "0.5rem",
+          }}
+        >
+          <Typography
+            sx={{
+              color: " #0500FF",
+              textAlign: "center",
+              fontWeight: "400",
+              fontSize: "18px",
+            }}
+          >
+            Departmental Elections
+          </Typography>
+        </div>
+        <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+          {loading && <Spinner text="Fetching elections..." />}
+
+          {elections && elections.length > 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2.5,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              {departmentalElections.map((election) => (
+                <BasicCard
+                  key={election.id}
+                  id={election.id}
+                  title={election.title}
+                  link={`/home/results/votes/${election.id}`}
+                />
+              ))}
+            </Box>
+          ) : (
+            <NotPresent text="No Available Elections" />
+          )}
         </Box>
       </Box>
     </Box>

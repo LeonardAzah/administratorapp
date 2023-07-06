@@ -135,7 +135,7 @@ const Election = () => {
                 display: "flex",
                 gap: 2.5,
                 flexWrap: "wrap",
-                justifyContent: "space-evenly",
+                justifyContent: "center",
               }}
             >
               {elections.map((election) => (
@@ -181,7 +181,7 @@ const Election = () => {
                 display: "flex",
                 gap: 2.5,
                 flexWrap: "wrap",
-                justifyContent: "space-evenly",
+                justifyContent: "center",
               }}
             >
               {departmentalElections.map((election) => (

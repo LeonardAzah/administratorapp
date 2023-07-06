@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import { Box, Typography, Snackbar, Alert } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
@@ -30,7 +30,6 @@ const validationSchema = yup.object().shape({
 
 function CandidateModal(props) {
   const { id } = useParams();
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const { open, handleClose } = props;
@@ -50,18 +49,8 @@ function CandidateModal(props) {
     if (success) {
       handleClose();
       props.resetForm();
-    } else {
-      setShowErrorAlert(true);
-      handleClose();
     }
     return axiosFetch;
-  };
-
-  const handleAlertClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowErrorAlert(false);
   };
 
   return (
@@ -78,20 +67,11 @@ function CandidateModal(props) {
             variant="h5"
             sx={{ textAlign: "center", fontWeight: "400", color: "#1a1f36" }}
           >
-            Add Candidate Election
+            Add Candidate To Election
           </Typography>
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ display: "block", justifyContent: "space-between" }}>
-        <Snackbar
-          open={showErrorAlert}
-          autoHideDuration={3000}
-          onClose={handleAlertClose}
-        >
-          <Alert severity="error" variant="filled" onClose={handleAlertClose}>
-            Student not found
-          </Alert>
-        </Snackbar>
         <Formik
           initialValues={initialValues}
           onSubmit={onSubmit}
@@ -99,6 +79,20 @@ function CandidateModal(props) {
         >
           {(props) => (
             <Form onSubmit={props.handleSubmit}>
+              <Typography
+                className={
+                  errorMessage && errorMessage ? "errorMessage" : "offscreen"
+                }
+                aria-live="assertive"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  marginBottom: "1rem",
+                  color: "#ba000d",
+                }}
+              >
+                {errorMessage}
+              </Typography>
               <Field
                 as={InputText}
                 label="Name"

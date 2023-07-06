@@ -82,6 +82,20 @@ function ElectionModal(props) {
         >
           {(props) => (
             <Form onSubmit={props.handleSubmit}>
+              <Typography
+                className={
+                  errorMessage && errorMessage ? "errorMessage" : "offscreen"
+                }
+                aria-live="assertive"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "0.9rem",
+                  marginBottom: "1rem",
+                  color: "#ba000d",
+                }}
+              >
+                {errorMessage}
+              </Typography>
               <Field
                 as={InputText}
                 label="Title"

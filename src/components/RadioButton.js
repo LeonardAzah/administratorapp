@@ -16,8 +16,8 @@ export default function RadioButton({ value, name, onChange }) {
         onChange={onChange}
         value={value}
       >
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
+        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+        <FormControlLabel value="Male" control={<Radio />} label="Male" />
       </RadioGroup>
     </FormControl>
   );

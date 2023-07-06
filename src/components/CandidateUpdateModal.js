@@ -1,60 +1,62 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import CircularProgress from "@mui/material/CircularProgress";
+import TextField from "@mui/material/TextField";
 
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import { Box, Typography } from "@mui/material";
-import dayjs from "dayjs";
-import DateTimeInput from "./DateTimeInput";
+import { Typography, Snackbar, Alert } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const Id = user.department;
-
-const initialValues = {
-  title: "",
-  startDate: dayjs(),
-  endDate: dayjs(),
-};
-
 const validationSchema = yup.object().shape({
-  titles: yup.string(),
-  startDate: yup.date(),
-  endDate: yup.date(),
+  name: yup.string(),
+  matricule: yup.string(),
+  bio: yup.string(),
 });
 
-function ElectionModalDepart(props) {
+function CandidateUpdateModal({ open, handleClose, candidate }) {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
-  const { open, handleClose } = props;
-  const today = dayjs();
-  const tomorrow = dayjs().add(1, "day");
-  const navigate = useNavigate();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
-  const CREATE_ELECTION_URL = `/poll/${Id}`;
+  const UPDATE_CANDIDATE_URL = `/candidate/${candidate && candidate.id}`;
+
   const onSubmit = async (values, props) => {
     console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
-      method: "post",
-      url: CREATE_ELECTION_URL,
+      method: "patch",
+      url: UPDATE_CANDIDATE_URL,
       requestConfig: {
         ...values,
       },
     });
     if (success) {
+      setShowSuccessAlert(true);
       props.resetForm();
+      handleClose();
     }
+
+    return axiosFetch;
   };
 
+  const initialValues = {
+    name: candidate && candidate.name,
+    matricule: candidate && candidate.matricule,
+    bio: candidate && candidate.bio,
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSuccessAlert(false);
+  };
   return (
     <Dialog
       open={open}
@@ -69,10 +71,24 @@ function ElectionModalDepart(props) {
             variant="h5"
             sx={{ textAlign: "center", fontWeight: "400", color: "#1a1f36" }}
           >
-            Create Election
+            Update Candidate In Election
           </Typography>
         </DialogContentText>
       </DialogContent>
+      <Snackbar
+        open={showSuccessAlert}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Candidate updated successfully
+        </Alert>
+      </Snackbar>
       <DialogActions sx={{ display: "block", justifyContent: "space-between" }}>
         <Formik
           initialValues={initialValues}
@@ -97,35 +113,36 @@ function ElectionModalDepart(props) {
               </Typography>
               <Field
                 as={InputText}
-                label="Title"
-                name="title"
+                label="Name"
+                name="name"
                 type="string"
                 fullWidth
                 required
                 onChange={props.handleChange}
-                value={props.values.title}
+                value={props.values.name}
               />
               <Field
-                as={DateTimeInput}
-                label="Start Date"
-                name="startDate"
-                defaultValue={today}
-                disablePast
-                views={["year", "month", "day", "hours", "minutes"]}
-                value={props.values.startDate}
-                onChange={(value) => props.setFieldValue("startDate", value)}
+                as={InputText}
+                label="Matricule"
+                name="matricule"
+                type="string"
                 fullWidth
+                required
+                onChange={props.handleChange}
+                value={props.values.matricule}
               />
-              <Field
-                as={DateTimeInput}
-                label="End Date"
-                name="endDate"
-                defaultValue={tomorrow}
-                disablePast
-                views={["year", "month", "day", "hours", "minutes"]}
-                value={props.values.endDate}
-                onChange={(value) => props.setFieldValue("endDate", value)}
+
+              <TextField
+                label="Bio"
+                name="bio"
+                placeholder="Enter candidate's bio"
+                multiline
+                rows={4}
+                onChange={props.handleChange}
+                value={props.values.bio}
                 fullWidth
+                required
+                sx={{ marginBottom: "1.1em" }}
               />
 
               <Field
@@ -138,10 +155,14 @@ function ElectionModalDepart(props) {
                 btnText={
                   props.isSubmitting ? (
                     <CircularProgress
-                      style={{ width: "20px", height: "20px", size: "0.5rem" }}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        size: "0.5rem",
+                      }}
                     />
                   ) : (
-                    "Create"
+                    "Add Candidate"
                   )
                 }
                 fullWidth
@@ -154,4 +175,4 @@ function ElectionModalDepart(props) {
   );
 }
 
-export default ElectionModalDepart;
+export default CandidateUpdateModal;

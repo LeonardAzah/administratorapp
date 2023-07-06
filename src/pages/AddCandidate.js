@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Appbar from "../components/Appbar";
 import { Typography, Box, Snackbar, Alert } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 import Spinner from "../components/Spinner";
@@ -9,12 +9,17 @@ import CandidateCard from "../components/CandidateCard";
 import NotPresentAdd from "../components/NotPresentAdd";
 import CandidateModal from "../components/candidateModal";
 import Modal from "../components/Modal";
+import CandidateUpdateModal from "../components/CandidateUpdateModal";
 
 const AddCandidate = () => {
   const { id } = useParams();
   const [openModal, setOpenModal] = React.useState(false);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [data, setData] = useState(null);
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
@@ -22,14 +27,23 @@ const AddCandidate = () => {
 
   const CANDIDATES_URL = `/poll/candidates/${id}`;
   const DELETE_CANDIDATE_URL = `/candidate/${selectedStudent}`;
+  const CANDIDATE_URL = `/candidate/${selectedStudent}`;
 
   useEffect(() => {
     getData();
   }, []);
 
   const handleDeletClick = (candidate) => {
+    console.log(candidate.id);
+    setData(candidate);
     setSelectedStudent(candidate.id);
     setOpenDeleteModal(true);
+  };
+
+  const handleEditClick = (candidate) => {
+    // console.log(candidate.id);
+    setSelectedStudent(candidate);
+    setOpenEditModal(true);
   };
 
   const handleSubmit = async () => {
@@ -49,15 +63,19 @@ const AddCandidate = () => {
   };
   const handleModalClose = () => {
     setOpenModal(false);
+
     getData();
   };
   const handleModalOpen = () => {
     setOpenModal(true);
   };
 
-  const handleDeletClickClose = () => {
+  const handleClickClose = () => {
     setSelectedStudent(null);
+    setData(null);
     setOpenDeleteModal(false);
+    setOpenEditModal(false);
+    getData();
   };
 
   const getData = async () => {
@@ -71,7 +89,20 @@ const AddCandidate = () => {
   };
 
   const candidates = response;
-  console.log(candidates.message);
+  console.log(candidates);
+
+  const getCandidate = async () => {
+    await axiosFetch({
+      axiosInstance: axiosInstance,
+      method: "get",
+      url: CANDIDATE_URL,
+    });
+
+    return axiosFetch;
+  };
+  useEffect(() => {
+    getCandidate();
+  }, []);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -112,11 +143,24 @@ const AddCandidate = () => {
               display: "flex",
               gap: 2.5,
               flexWrap: "wrap",
-              justifyContent: "start",
+              justifyContent: "center",
             }}
           >
             <NotPresentAdd onClick={handleModalOpen} />
             <CandidateModal open={openModal} handleClose={handleModalClose} />
+            <CandidateUpdateModal
+              open={openEditModal}
+              handleClose={handleClickClose}
+              candidate={selectedStudent}
+            />
+            <Modal
+              text={`This action will delete ${
+                data && data.name
+              } from list of candidates,  Are you sure you want to proceed?`}
+              open={openDeleteModal}
+              handleClose={handleClickClose}
+              handleSubmit={handleSubmit}
+            />
             <Snackbar
               open={showSuccessAlert}
               autoHideDuration={6000}
@@ -156,13 +200,7 @@ const AddCandidate = () => {
                     name={candidate.name}
                     bio={candidate.bio}
                     handleDeletClick={() => handleDeletClick(candidate)}
-                    // handleEditCLick={}
-                  />
-                  <Modal
-                    text={`This action will delete ${candidate.name} from list of candidates,  Are you sure you want to proceed?`}
-                    open={openDeleteModal}
-                    handleClose={handleDeletClickClose}
-                    handleSubmit={handleSubmit}
+                    handleEditClick={() => handleEditClick(candidate)}
                   />
                 </>
               ))
