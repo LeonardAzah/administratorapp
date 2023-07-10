@@ -4,6 +4,7 @@ import { AppBar, Toolbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AuthContext from "../hooks/AuthContext";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const Appbar = () => {
   const { logout, userInfo } = useContext(AuthContext);
@@ -16,7 +17,9 @@ const Appbar = () => {
 
   return (
     <Box>
-      <AppBar component="nav" color="transparent">
+      <CssBaseline />
+
+      <AppBar component="nav" sx={{ background: "#fefefe" }} position="fixed">
         <Toolbar>
           <Button
             sx={{

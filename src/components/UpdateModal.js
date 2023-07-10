@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,7 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import dayjs from "dayjs";
 import DateTimeInput from "./DateTimeInput";
 import { Formik, Form, Field } from "formik";
@@ -16,43 +16,66 @@ import * as yup from "yup";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 
-const initialValues = {
-  title: "",
-  startDate: dayjs(),
-  endDate: dayjs(),
-};
-
 const validationSchema = yup.object().shape({
   titles: yup.string(),
   startDate: yup.date(),
   endDate: yup.date(),
 });
 
-function ElectionModalDepart(props) {
+function UpdateModal(props) {
+  const { id } = useParams();
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const { open, handleClose } = props;
   const today = dayjs();
   const tomorrow = dayjs().add(1, "day");
-  const navigate = useNavigate();
 
-  const userInfo = window.localStorage.getItem("user");
-  const user = JSON.parse(userInfo);
-  const Id = user.department;
+  const UPDATE_ELECTION_URL = `/poll/${id}`;
+  const GET_ELECTION = `/poll/${id}`;
 
-  const CREATE_ELECTION_URL = `/poll/${Id}`;
+  const getData = async () => {
+    await axiosFetch({
+      axiosInstance: axiosInstance,
+      method: "get",
+      url: GET_ELECTION,
+    });
+
+    return axiosFetch;
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+  const election = response;
+
   const onSubmit = async (values, props) => {
-    console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
-      method: "post",
-      url: CREATE_ELECTION_URL,
+      method: "patch",
+      url: UPDATE_ELECTION_URL,
       requestConfig: {
         ...values,
       },
     });
     if (success) {
-      props.resetForm();
+      //   props.resetForm();
+      setShowSuccessAlert(true);
+
+      //   handleClose();
     }
+  };
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSuccessAlert(false);
+  };
+
+  const initialValues = {
+    title: election && election.title,
+    startDate: dayjs(),
+    endDate: dayjs(),
   };
 
   return (
@@ -69,10 +92,24 @@ function ElectionModalDepart(props) {
             variant="h5"
             sx={{ textAlign: "center", fontWeight: "400", color: "#1a1f36" }}
           >
-            Create Election
+            Update Election
           </Typography>
         </DialogContentText>
       </DialogContent>
+      <Snackbar
+        open={showSuccessAlert}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Election updated successfully
+        </Alert>
+      </Snackbar>
       <DialogActions sx={{ display: "block", justifyContent: "space-between" }}>
         <Formik
           initialValues={initialValues}
@@ -141,7 +178,7 @@ function ElectionModalDepart(props) {
                       style={{ width: "20px", height: "20px", size: "0.5rem" }}
                     />
                   ) : (
-                    "Create"
+                    "Update"
                   )
                 }
                 fullWidth
@@ -154,4 +191,4 @@ function ElectionModalDepart(props) {
   );
 }
 
-export default ElectionModalDepart;
+export default UpdateModal;

@@ -16,10 +16,6 @@ import * as yup from "yup";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const Id = user.faculty;
-
 const initialValues = {
   title: "",
   startDate: dayjs(),
@@ -38,6 +34,10 @@ function ElectionModal(props) {
   const today = dayjs();
   const tomorrow = dayjs().add(1, "day");
   const navigate = useNavigate();
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const Id = user.faculty;
 
   const CREATE_ELECTION_URL = `/poll/${Id}`;
   const onSubmit = async (values, props) => {

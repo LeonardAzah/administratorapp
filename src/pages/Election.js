@@ -13,17 +13,19 @@ import KeyboardArrowDownSharpIcon from "@mui/icons-material/KeyboardArrowDownSha
 import { Link } from "react-router-dom";
 import ElectionModal from "../components/ELectionModal";
 import ElectionModalDepart from "../components/ELectionModalDepart";
-
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const facultyId = user.faculty;
-const departmentId = user.department;
-const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
+import CssBaseline from "@mui/material/CssBaseline";
 
 const Election = () => {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const [openModal, setOpenModal] = React.useState(false);
   const [openModalDept, setOpenModalDept] = React.useState(false);
+  // const [isActive, setIsActive] = React.useState(false);
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const facultyId = user.faculty;
+  const departmentId = user.department;
+  const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -61,141 +63,148 @@ const Election = () => {
     getData();
   }, []);
 
-  const elections = response.polls;
+  const elections = response.facultyPolls;
+  console.log(elections);
+
   const departmentalElections = response.departmentpolls;
+
   return (
     <Box>
-      <Box sx={{ paddingBottom: "8rem" }}>
-        <Appbar />
-      </Box>
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: "1rem",
-          }}
-        >
-          <Button
-            id="basic-button"
-            variant="contained"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-            endIcon={<KeyboardArrowDownSharpIcon />}
-            sx={{ borderRadius: "20px", textTransform: "none" }}
-          >
-            Create Election
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
+      <CssBaseline />
+
+      <Appbar />
+      <Box sx={{ marginTop: "8rem" }}>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: "1rem",
             }}
           >
-            <MenuItem onClick={handleModalOpen}>Faculty</MenuItem>
-            <MenuItem onClick={handleModalDeptOpen}>Departmental</MenuItem>
-          </Menu>
-          <Box>
-            <ElectionModal open={openModal} handleClose={handleModalClose} />
-            <ElectionModalDepart
-              open={openModalDept}
-              handleClose={handleModalClose}
-            />
+            <Button
+              id="basic-button"
+              variant="contained"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              endIcon={<KeyboardArrowDownSharpIcon />}
+              sx={{ borderRadius: "20px", textTransform: "none" }}
+            >
+              Create Election
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleModalOpen}>Faculty</MenuItem>
+              <MenuItem onClick={handleModalDeptOpen}>Departmental</MenuItem>
+            </Menu>
+            <Box>
+              <ElectionModal open={openModal} handleClose={handleModalClose} />
+              <ElectionModalDepart
+                open={openModalDept}
+                handleClose={handleModalClose}
+              />
+            </Box>
+          </Box>
+          <div
+            style={{
+              borderRadius: "25px",
+              background: "rgba(5, 0, 255, 0.2)",
+              padding: "0.5rem",
+            }}
+          >
+            <Typography
+              sx={{
+                color: " #0500FF",
+                textAlign: "center",
+                fontWeight: "400",
+                fontSize: "18px",
+              }}
+            >
+              Faculty Elections
+            </Typography>
+          </div>
+          <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+            {loading && <Spinner text="Fetching elections..." />}
+
+            {elections && elections.length > 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2.5,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                {elections.map((election) => (
+                  <BasicCard
+                    key={election.id}
+                    id={election.id}
+                    title={election.title}
+                    isActive={election.isActive}
+                    link={`/home/poll/candidates/${election.id}`}
+                  />
+                ))}
+              </Box>
+            ) : (
+              <NotPresent text="No Available Elections" />
+            )}
           </Box>
         </Box>
-        <div
-          style={{
-            borderRadius: "25px",
-            background: "rgba(5, 0, 255, 0.2)",
-            padding: "0.5rem",
-          }}
-        >
-          <Typography
-            sx={{
-              color: " #0500FF",
-              textAlign: "center",
-              fontWeight: "400",
-              fontSize: "18px",
+
+        <Box>
+          <div
+            style={{
+              borderRadius: "25px",
+              background: "rgba(5, 0, 255, 0.2)",
+              padding: "0.5rem",
             }}
           >
-            Faculty Elections
-          </Typography>
-        </div>
-        <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
-          {loading && <Spinner text="Fetching elections..." />}
-
-          {elections && elections.length > 0 ? (
-            <Box
+            <Typography
               sx={{
-                display: "flex",
-                gap: 2.5,
-                flexWrap: "wrap",
-                justifyContent: "center",
+                color: " #0500FF",
+                textAlign: "center",
+                fontWeight: "400",
+                fontSize: "18px",
               }}
             >
-              {elections.map((election) => (
-                <BasicCard
-                  key={election.id}
-                  id={election.id}
-                  title={election.title}
-                  link={`/home/poll/candidates/${election.id}`}
-                />
-              ))}
-            </Box>
-          ) : (
-            <NotPresent text="No Available Elections" />
-          )}
-        </Box>
-      </Box>
+              Departmental Elections
+            </Typography>
+          </div>
+          <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
+            {loading && <Spinner text="Fetching elections..." />}
 
-      <Box>
-        <div
-          style={{
-            borderRadius: "25px",
-            background: "rgba(5, 0, 255, 0.2)",
-            padding: "0.5rem",
-          }}
-        >
-          <Typography
-            sx={{
-              color: " #0500FF",
-              textAlign: "center",
-              fontWeight: "400",
-              fontSize: "18px",
-            }}
-          >
-            Departmental Elections
-          </Typography>
-        </div>
-        <Box sx={{ padding: "0.5rem", display: "flex", gap: 2.5 }}>
-          {loading && <Spinner text="Fetching elections..." />}
-
-          {elections && elections.length > 0 ? (
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2.5,
-                flexWrap: "wrap",
-                justifyContent: "center",
-              }}
-            >
-              {departmentalElections.map((election) => (
-                <BasicCard
-                  key={election.id}
-                  id={election.id}
-                  title={election.title}
-                  link={`/home/poll/candidates/${election.id}`}
-                />
-              ))}
-            </Box>
-          ) : (
-            <NotPresent text="No Available Elections" />
-          )}
+            {elections && elections.length > 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2.5,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                {departmentalElections.map((election) => (
+                  <BasicCard
+                    key={election.id}
+                    id={election.id}
+                    title={election.title}
+                    isActive={election.isActive}
+                    link={`/home/poll/candidates/${election.id}`}
+                  />
+                ))}
+              </Box>
+            ) : (
+              <NotPresent text="No Available Elections" />
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>

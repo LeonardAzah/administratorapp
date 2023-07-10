@@ -9,14 +9,14 @@ import Appbar from "../components/Appbar";
 import NotPresent from "../components/NotPresent";
 import BasicCard from "../components/BasicCard";
 
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const facultyId = user.faculty;
-const departmentId = user.department;
-const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
-
 const Poll = () => {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const facultyId = user.faculty;
+  const departmentId = user.department;
+  const ELECTION_URL = `/poll/faculty/${facultyId}/department/${departmentId}`;
 
   const getData = async () => {
     await axiosFetch({
@@ -32,7 +32,9 @@ const Poll = () => {
     getData();
   }, []);
 
-  const elections = response.polls;
+  const elections = response.facultyPolls;
+  console.log(elections);
+
   const departmentalElections = response.departmentpolls;
 
   return (
@@ -73,9 +75,15 @@ const Poll = () => {
             >
               {elections.map((election) => (
                 <BasicCard
+                  // key={election.id}
+                  // id={election.id}
+                  // title={election.title}
+                  // link={`/home/results/votes/${election.id}`}
+
                   key={election.id}
                   id={election.id}
                   title={election.title}
+                  isActive={election.isActive}
                   link={`/home/results/votes/${election.id}`}
                 />
               ))}
@@ -119,9 +127,15 @@ const Poll = () => {
             >
               {departmentalElections.map((election) => (
                 <BasicCard
+                  // key={election.id}
+                  // id={election.id}
+                  // title={election.title}
+                  // link={`/home/results/votes/${election.id}`}
+
                   key={election.id}
                   id={election.id}
                   title={election.title}
+                  isActive={election.isActive}
                   link={`/home/results/votes/${election.id}`}
                 />
               ))}

@@ -14,11 +14,6 @@ import Appbar from "../components/Appbar";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 
-const userInfo = window.localStorage.getItem("user");
-const user = JSON.parse(userInfo);
-const facultyId = user.faculty;
-const departmentId = user.department;
-
 const gridStyle = {
   padding: "1rem",
 };
@@ -48,6 +43,11 @@ const validationSchema = yup.object().shape({
 const Signup = () => {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+  const userInfo = window.localStorage.getItem("user");
+  const user = JSON.parse(userInfo);
+  const facultyId = user.faculty;
+  const departmentId = user.department;
 
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
   const CREATE_CANDIDATE_URL = `/signup/faculty/${facultyId}/department/${departmentId}`;

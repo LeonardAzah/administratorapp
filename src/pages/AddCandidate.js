@@ -11,11 +11,16 @@ import CandidateModal from "../components/candidateModal";
 import Modal from "../components/Modal";
 import CandidateUpdateModal from "../components/CandidateUpdateModal";
 
+import Fab from "@mui/material/Fab";
+import EditIcon from "@mui/icons-material/Edit";
+import UpdateModal from "../components/UpdateModal";
+
 const AddCandidate = () => {
   const { id } = useParams();
   const [openModal, setOpenModal] = React.useState(false);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const [openEditModal, setOpenEditModal] = React.useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
 
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [data, setData] = useState(null);
@@ -34,14 +39,16 @@ const AddCandidate = () => {
   }, []);
 
   const handleDeletClick = (candidate) => {
-    console.log(candidate.id);
     setData(candidate);
     setSelectedStudent(candidate.id);
     setOpenDeleteModal(true);
   };
 
+  const handleUpdate = () => {
+    setOpenUpdateModal(true);
+  };
+
   const handleEditClick = (candidate) => {
-    // console.log(candidate.id);
     setSelectedStudent(candidate);
     setOpenEditModal(true);
   };
@@ -75,6 +82,7 @@ const AddCandidate = () => {
     setData(null);
     setOpenDeleteModal(false);
     setOpenEditModal(false);
+    setOpenUpdateModal(false);
     getData();
   };
 
@@ -116,6 +124,11 @@ const AddCandidate = () => {
     <Box>
       <Box sx={{ paddingBottom: "8rem" }}>
         <Appbar />
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Fab color="secondary" aria-label="edit" onClick={handleUpdate}>
+          <EditIcon />
+        </Fab>
       </Box>
       <Box>
         <Box
@@ -160,6 +173,10 @@ const AddCandidate = () => {
               open={openDeleteModal}
               handleClose={handleClickClose}
               handleSubmit={handleSubmit}
+            />
+            <UpdateModal
+              open={openUpdateModal}
+              handleClose={handleClickClose}
             />
             <Snackbar
               open={showSuccessAlert}

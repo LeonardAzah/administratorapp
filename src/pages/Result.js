@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Typography, Box } from "@mui/material";
@@ -9,6 +9,7 @@ import Spinner from "../components/Spinner";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 import NotPresent from "../components/NotPresent";
+import CountdownTimer from "../components/CountdownTimer";
 
 const Result = () => {
   const { id } = useParams();
@@ -35,9 +36,11 @@ const Result = () => {
 
   return (
     <Box>
-      <Box sx={{ paddingBottom: "8rem" }}>
+      <Box sx={{ paddingBottom: "5rem" }}>
         <Appbar />
       </Box>
+
+      <CountdownTimer id={id} />
       <Box>
         <Box
           sx={{

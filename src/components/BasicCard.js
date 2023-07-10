@@ -10,19 +10,21 @@ import { Avatar } from "@mui/material";
 import BallotIcon from "@mui/icons-material/Ballot";
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
+import HowToVoteIcon from "@mui/icons-material/HowToVote";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const StyledCard = styled((props) => <Card {...props} />)(({ theme }) => ({
-  padding: "1rem",
   borderRadius: "0.5rem",
   backgroundColor: "#fafafa",
   boxShadow: 5,
-  width: "150px",
-  height: "200px",
+  width: "265px",
+  height: "130px",
+
+  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
 }));
 
-export default function BasicCard({ title, id, link }) {
+export default function BasicCard({ title, id, link, isActive }) {
   return (
     <StyledCard
       component={Link}
@@ -35,20 +37,22 @@ export default function BasicCard({ title, id, link }) {
         textDecoration: "none",
       }}
     >
-      {/* <Switch {...label} defaultChecked /> */}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {isActive ? <Switch {...label} defaultChecked /> : null}
+      </Box>
 
       <Avatar
         sx={{
-          height: "4rem",
-          width: "4rem",
+          height: "3rem",
+          width: "3rem",
           margin: "10px auto",
           display: "flex",
           justifyContent: "center",
         }}
       >
-        <BallotIcon />
+        <HowToVoteIcon fontSize="large" />
       </Avatar>
-      <CardContent>
+      <Box>
         {title && (
           <Typography
             sx={{
@@ -62,7 +66,7 @@ export default function BasicCard({ title, id, link }) {
             {title}
           </Typography>
         )}
-      </CardContent>
+      </Box>
     </StyledCard>
   );
 }

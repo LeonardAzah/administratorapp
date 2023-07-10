@@ -45,6 +45,7 @@ export function AuthProvider({ children }) {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     return () => controller && controller.abort();
   }, [controller]);

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// import axiosInstance from "../api/AxiosInstance";
 
 const useAxios = () => {
   const [response, setResponse] = useState([]);
@@ -23,7 +22,7 @@ const useAxios = () => {
     } catch (err) {
       if (err.isAxiosError) {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
+          setErrorMessage(err.response.data.error);
         }
       }
       setErrorMessage(err.response.data.error);
