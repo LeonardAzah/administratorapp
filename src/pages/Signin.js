@@ -16,7 +16,7 @@ import AuthContext from "../hooks/AuthContext";
 import logo from "../assets/logo.png";
 
 export const gridStyle = {
-  marginTop: { xs: "40%", sm: "10%" },
+  marginTop: { xs: "40%", sm: "5%" },
 };
 
 export const btnStyle = {

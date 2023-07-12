@@ -216,6 +216,7 @@ const AddCandidate = () => {
                     key={candidate.id}
                     name={candidate.name}
                     bio={candidate.bio}
+                    image={candidate.image}
                     handleDeletClick={() => handleDeletClick(candidate)}
                     handleEditClick={() => handleEditClick(candidate)}
                   />

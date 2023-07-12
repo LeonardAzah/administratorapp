@@ -78,13 +78,6 @@ const CountdownTimer = ({ id }) => {
   }, []);
 
   return (
-    // <div>
-    //   {isActive !== null
-    //     ? isActive
-    //       ? countdown
-    //       : "Election not active"
-    //     : null}
-    // </div>
     <Box
       sx={{ display: "flex", justifyContent: "center", paddingBottom: "1rem" }}
     >

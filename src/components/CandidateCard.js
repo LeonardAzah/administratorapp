@@ -32,12 +32,23 @@ const styledAvatar = {
   width: "8rem",
 };
 
-const CandidateCard = ({ name, bio, handleDeletClick, handleEditClick }) => {
+const CandidateCard = ({
+  name,
+  bio,
+  handleDeletClick,
+  handleEditClick,
+  image,
+}) => {
   return (
     <StyledCard elevation={1}>
       <Box sx={{ display: "block" }}>
         <Box sx={{ display: "flex", height: "10rem" }}>
-          <Avatar variant="rounded" sx={styledAvatar} alt="photo" src={me} />
+          <Avatar
+            variant="rounded"
+            sx={styledAvatar}
+            // alt="photo"
+            src={`http://localhost:3500/uploads/` + image}
+          />
 
           <Box sx={{ padding: "0.1rem", overflow: "auto" }}>
             <Typography

@@ -50,6 +50,7 @@ function UpdateModal(props) {
   const election = response;
 
   const onSubmit = async (values, props) => {
+    console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
       method: "patch",
@@ -97,6 +98,7 @@ function UpdateModal(props) {
         </DialogContentText>
       </DialogContent>
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showSuccessAlert}
         autoHideDuration={6000}
         onClose={handleAlertClose}

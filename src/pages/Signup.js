@@ -13,6 +13,7 @@ import Buttons from "../components/Buttons";
 import Appbar from "../components/Appbar";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
+import ImageUploader from "../components/ImageUploader";
 
 const gridStyle = {
   padding: "1rem",
@@ -221,6 +222,7 @@ const Signup = () => {
                   onChange={props.handleChange}
                   value={props.values.password}
                 />
+                <ImageUploader />
                 <Field
                   as={Buttons}
                   type="submit"

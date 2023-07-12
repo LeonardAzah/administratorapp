@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,6 +13,7 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
+import ImageUploader from "./ImageUploader";
 
 const validationSchema = yup.object().shape({
   name: yup.string(),
@@ -21,34 +22,65 @@ const validationSchema = yup.object().shape({
 });
 
 function CandidateUpdateModal({ open, handleClose, candidate }) {
-  const [response, errorMessage, loading, axiosFetch] = useAxios();
+  const inputRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // const [response, errorMessage, loading, axiosFetch] = useAxios();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const UPDATE_CANDIDATE_URL = `/candidate/${candidate && candidate.id}`;
 
+  // const onSubmit = async (values, props) => {
+  //   console.log(values);
+  //   let formData = new FormData();
+  //   formData.append("name", values.name);
+  //   formData.append("matricule", values.matricule);
+  //   formData.append("bio", values.bio);
+  //   formData.append("image", values.image);
+  //   const success = await axiosFetch({
+  //     axiosInstance: axiosInstance,
+  //     method: "patch",
+  //     url: UPDATE_CANDIDATE_URL,
+  //     requestConfig: {
+  //       ...values,
+
+  //       headers: {
+  //         "Content-Type": "multipart/form-data", // Important!
+  //       },
+  //     },
+  //   });
+  //   if (success) {
+  //     setShowSuccessAlert(true);
+  //     props.resetForm();
+  //     handleClose();
+  //   }
+
+  //   return axiosFetch;
+  // };
+
   const onSubmit = async (values, props) => {
-    console.log(values);
-    const success = await axiosFetch({
-      axiosInstance: axiosInstance,
-      method: "patch",
-      url: UPDATE_CANDIDATE_URL,
-      requestConfig: {
-        ...values,
-      },
-    });
-    if (success) {
+    try {
+      await axiosInstance.patch(UPDATE_CANDIDATE_URL, values, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important!
+        },
+      });
+
+      // Handle successful upload
       setShowSuccessAlert(true);
       props.resetForm();
       handleClose();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(error.response.data.error);
     }
-
-    return axiosFetch;
   };
 
   const initialValues = {
     name: candidate && candidate.name,
     matricule: candidate && candidate.matricule,
     bio: candidate && candidate.bio,
+    image: null,
   };
 
   const handleAlertClose = (event, reason) => {
@@ -56,6 +88,10 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
       return;
     }
     setShowSuccessAlert(false);
+  };
+
+  const handleClick = () => {
+    inputRef.current.click();
   };
   return (
     <Dialog
@@ -76,6 +112,7 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
         </DialogContentText>
       </DialogContent>
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={showSuccessAlert}
         autoHideDuration={6000}
         onClose={handleAlertClose}
@@ -144,6 +181,15 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
                 required
                 sx={{ marginBottom: "1.1em" }}
               />
+              <ImageUploader
+                name="image"
+                image={props.values.image}
+                onChange={(event) =>
+                  props.setFieldValue("image", event.currentTarget.files[0])
+                }
+                onClick={handleClick}
+                Ref={inputRef}
+              />
 
               <Field
                 as={Buttons}
@@ -162,7 +208,7 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
                       }}
                     />
                   ) : (
-                    "Add Candidate"
+                    "Update Candidate"
                   )
                 }
                 fullWidth

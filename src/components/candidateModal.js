@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -15,21 +15,26 @@ import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
 import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
+import ImageUploader from "./ImageUploader";
 
 const initialValues = {
   name: "",
   matricule: "",
   bio: "",
+  image: "",
 };
 
 const validationSchema = yup.object().shape({
   name: yup.string(),
   matricule: yup.string(),
   bio: yup.string(),
+  image: yup.string(),
 });
 
 function CandidateModal(props) {
   const { id } = useParams();
+
+  const inputRef = useRef(null);
 
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const { open, handleClose } = props;
@@ -37,20 +42,30 @@ function CandidateModal(props) {
   const CREATE_CANDIDATE_URL = `/candidate/${id}`;
 
   const onSubmit = async (values, props) => {
-    console.log(values);
-    const success = await axiosFetch({
-      axiosInstance: axiosInstance,
-      method: "post",
-      url: CREATE_CANDIDATE_URL,
-      requestConfig: {
-        ...values,
-      },
-    });
-    if (success) {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", values.name);
+      formData.append("matricule", values.matricule);
+      formData.append("bio", values.bio);
+      formData.append("image", values.image);
+
+      await axiosInstance.post(CREATE_CANDIDATE_URL, values, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important!
+        },
+      });
+
+      // Handle successful upload
       handleClose();
       props.resetForm();
+    } catch (error) {
+      console.error(error);
     }
-    return axiosFetch;
+  };
+
+  const handleClick = () => {
+    inputRef.current.click();
   };
 
   return (
@@ -126,7 +141,15 @@ function CandidateModal(props) {
                 required
                 sx={{ marginBottom: "1.1em" }}
               />
-
+              <ImageUploader
+                name="image"
+                image={props.values.image}
+                onChange={(event) =>
+                  props.setFieldValue("image", event.currentTarget.files[0])
+                }
+                onClick={handleClick}
+                Ref={inputRef}
+              />
               <Field
                 as={Buttons}
                 type="submit"

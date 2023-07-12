@@ -75,11 +75,6 @@ const Poll = () => {
             >
               {elections.map((election) => (
                 <BasicCard
-                  // key={election.id}
-                  // id={election.id}
-                  // title={election.title}
-                  // link={`/home/results/votes/${election.id}`}
-
                   key={election.id}
                   id={election.id}
                   title={election.title}
@@ -127,11 +122,6 @@ const Poll = () => {
             >
               {departmentalElections.map((election) => (
                 <BasicCard
-                  // key={election.id}
-                  // id={election.id}
-                  // title={election.title}
-                  // link={`/home/results/votes/${election.id}`}
-
                   key={election.id}
                   id={election.id}
                   title={election.title}
