@@ -25,38 +25,9 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
   const inputRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const [response, errorMessage, loading, axiosFetch] = useAxios();
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const UPDATE_CANDIDATE_URL = `/candidate/${candidate && candidate.id}`;
-
-  // const onSubmit = async (values, props) => {
-  //   console.log(values);
-  //   let formData = new FormData();
-  //   formData.append("name", values.name);
-  //   formData.append("matricule", values.matricule);
-  //   formData.append("bio", values.bio);
-  //   formData.append("image", values.image);
-  //   const success = await axiosFetch({
-  //     axiosInstance: axiosInstance,
-  //     method: "patch",
-  //     url: UPDATE_CANDIDATE_URL,
-  //     requestConfig: {
-  //       ...values,
-
-  //       headers: {
-  //         "Content-Type": "multipart/form-data", // Important!
-  //       },
-  //     },
-  //   });
-  //   if (success) {
-  //     setShowSuccessAlert(true);
-  //     props.resetForm();
-  //     handleClose();
-  //   }
-
-  //   return axiosFetch;
-  // };
 
   const onSubmit = async (values, props) => {
     try {
@@ -71,7 +42,6 @@ function CandidateUpdateModal({ open, handleClose, candidate }) {
       props.resetForm();
       handleClose();
     } catch (error) {
-      console.error(error);
       setErrorMessage(error.response.data.error);
     }
   };

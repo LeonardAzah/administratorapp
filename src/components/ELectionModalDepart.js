@@ -51,6 +51,7 @@ function ElectionModalDepart(props) {
       },
     });
     if (success) {
+      handleClose();
       props.resetForm();
     }
   };

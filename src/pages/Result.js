@@ -31,7 +31,7 @@ const Result = () => {
     getData();
   }, []);
 
-  const candidates = response;
+  const candidates = response.candidateVotes;
   console.log(candidates);
 
   return (
@@ -77,7 +77,8 @@ const Result = () => {
                   <ResultCard
                     key={candidate.id}
                     name={candidate.name}
-                    voteCount={candidate.voteCount}
+                    image={candidate.image}
+                    voteCount={candidate.count}
                   />
                 </>
               ))}

@@ -17,11 +17,16 @@ const styledAvatar = {
   width: "8rem",
 };
 
-const ResultCard = ({ name, voteCount }) => {
+const ResultCard = ({ name, voteCount, image }) => {
   return (
     <StyledCard elevation={1}>
       <Box sx={{ display: "flex" }}>
-        <Avatar variant="rounded" sx={styledAvatar} alt="photo" src={me} />
+        <Avatar
+          variant="rounded"
+          sx={styledAvatar}
+          alt="photo"
+          src={`http://localhost:3500/uploads/` + image}
+        />
 
         <Box
           sx={{

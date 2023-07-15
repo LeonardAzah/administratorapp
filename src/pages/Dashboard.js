@@ -1,34 +1,30 @@
 import React, { useContext, useState } from "react";
 
+import pagepic from "../assets/pagepic.jpg";
+
 import Appbar from "../components/Appbar";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AuthContext from "../hooks/AuthContext";
-import axiosInstance from "../api/AxiosInstance";
 
 const Dashboard = () => {
-  const { userInfo } = useContext(AuthContext);
-  const { open, setOpen } = useState(true);
-
-  // const refreshToken = async (error) => {
-  //   return Promise.reject(error.response.data);
-
-  //   // return await axiosInstance.get("/refresh");
-  // };
-
-  // console.log(refreshToken());
-
   return (
     <div>
-      <Box sx={{ paddingBottom: "8rem" }}>
+      <Box sx={{ paddingBottom: "6rem" }}>
         <Appbar />
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingBottom: "2rem",
+        }}
+      >
         <Typography
           variant="h4"
           sx={{
             color: "#01579B",
-            fontWeight: "700",
+            fontWeight: "900",
             position: "absolute",
             textAlign: "center",
           }}
@@ -36,10 +32,44 @@ const Dashboard = () => {
           2023 CAMPUS ELECTION
         </Typography>
       </Box>
-
-      {/* <Box>
-        <Button onClick={refreshToken()}>Refresh</Button>
-      </Box> */}
+      <Box
+        sx={{
+          display: { xs: "block", sm: "flex" },
+          justifyContent: "center",
+          alignItems: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Typography
+            variant="h3"
+            sx={{
+              fontWeight: 700,
+              textAlign: "center",
+              color: "#212121",
+              paddingTop: "5rem",
+            }}
+          >
+            Why do we Vote
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              pt: 2,
+              pl: 2,
+              lineHeight: 2,
+            }}
+          >
+            Voting is essential in democratic societies for several reasons. It
+            allows citizens to choose representatives, participate in
+            decision-making, hold officials accountable, influence policies,
+            drive social change, and fulfill their civic duty. It empowers
+            individuals to have a voice in shaping their community and ensures
+            that their interests are represented.
+          </Typography>
+        </Box>
+        <img src={pagepic} alt="vote" style={{ width: "50%" }} />
+      </Box>
     </div>
   );
 };

@@ -44,9 +44,7 @@ const Signin = () => {
     props.setSubmitting(false);
     isLoggedIn && navigate("/home");
   };
-  useEffect(() => {
-    onHandleSubmit();
-  }, []);
+
   return (
     <Grid
       container

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Formik, Form, Field } from "formik";
@@ -54,7 +54,6 @@ const Signup = () => {
   const CREATE_CANDIDATE_URL = `/signup/faculty/${facultyId}/department/${departmentId}`;
 
   const onSubmit = async (values, props) => {
-    console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
       method: "post",
@@ -64,12 +63,17 @@ const Signup = () => {
       },
     });
     if (success) {
-      setShowSuccessAlert(true);
       props.resetForm();
+      setShowSuccessAlert(true);
+      console.log(showSuccessAlert);
     }
 
     return axiosFetch;
   };
+
+  // useEffect(() => {
+  //   onSubmit();
+  // }, [response]);
 
   const handleAlertClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -108,6 +112,7 @@ const Signup = () => {
       </Grid>
       <Grid sx={{ display: "flex", alignItems: "center" }} md={6} Spacing={2}>
         <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           open={showSuccessAlert}
           autoHideDuration={6000}
           onClose={handleAlertClose}
@@ -222,7 +227,6 @@ const Signup = () => {
                   onChange={props.handleChange}
                   value={props.values.password}
                 />
-                <ImageUploader />
                 <Field
                   as={Buttons}
                   type="submit"

@@ -9,11 +9,9 @@ import TextField from "@mui/material/TextField";
 
 import Buttons from "./Buttons";
 import InputText from "./InputText";
-import { Box, Typography } from "@mui/material";
-import dayjs from "dayjs";
+import { Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as yup from "yup";
-import useAxios from "../hooks/useAxios";
 import axiosInstance from "../api/AxiosInstance";
 import ImageUploader from "./ImageUploader";
 
@@ -35,12 +33,10 @@ function CandidateModal(props) {
   const { id } = useParams();
 
   const inputRef = useRef(null);
-
-  const [response, errorMessage, loading, axiosFetch] = useAxios();
+  const [errorMessage, setErrorMessage] = useState("");
   const { open, handleClose } = props;
   const navigate = useNavigate();
-  // const CREATE_CANDIDATE_URL = `/candidate/${id}`;
-  const CREATE_CANDIDATE_URL = `/poll/testing/${id}`;
+  const CREATE_CANDIDATE_URL = `/candidate/${id}`;
 
   const onSubmit = async (values, props) => {
     try {
@@ -62,6 +58,7 @@ function CandidateModal(props) {
       props.resetForm();
     } catch (error) {
       console.error(error);
+      setErrorMessage(error.response.data.error);
     }
   };
 

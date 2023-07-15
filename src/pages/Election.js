@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import ElectionModal from "../components/ELectionModal";
 import ElectionModalDepart from "../components/ELectionModalDepart";
 import CssBaseline from "@mui/material/CssBaseline";
+import CountdownTimer from "../components/CountdownTimer";
 
 const Election = () => {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
