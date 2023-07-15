@@ -39,7 +39,8 @@ function CandidateModal(props) {
   const [response, errorMessage, loading, axiosFetch] = useAxios();
   const { open, handleClose } = props;
   const navigate = useNavigate();
-  const CREATE_CANDIDATE_URL = `/candidate/${id}`;
+  // const CREATE_CANDIDATE_URL = `/candidate/${id}`;
+  const CREATE_CANDIDATE_URL = `/poll/testing/${id}`;
 
   const onSubmit = async (values, props) => {
     try {

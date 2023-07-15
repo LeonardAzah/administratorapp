@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Grid, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Formik, Form, Field } from "formik";
@@ -41,13 +41,12 @@ const Signin = () => {
 
   const onHandleSubmit = async (values, props) => {
     const isLoggedIn = await login(values);
-    console.log(isLoggedIn);
-    console.log(userInfo);
-
     props.setSubmitting(false);
     isLoggedIn && navigate("/home");
   };
-
+  useEffect(() => {
+    onHandleSubmit();
+  }, []);
   return (
     <Grid
       container

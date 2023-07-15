@@ -33,13 +33,9 @@ export function AuthProvider({ children }) {
     } catch (err) {
       if (err.isAxiosError) {
         if (err.response) {
-          setErrorMessage(err.response.data.message);
-          // console.log(err.response.data.message);
-        } else {
-          console.log("Error");
+          setErrorMessage(err.response.data.error);
         }
-      } else {
-        console.log(err);
+        setErrorMessage(err.response.data.error);
       }
     } finally {
       setIsLoading(false);

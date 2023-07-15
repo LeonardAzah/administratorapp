@@ -41,7 +41,6 @@ function ElectionModal(props) {
 
   const CREATE_ELECTION_URL = `/poll/${Id}`;
   const onSubmit = async (values, props) => {
-    console.log(values);
     const success = await axiosFetch({
       axiosInstance: axiosInstance,
       method: "post",
